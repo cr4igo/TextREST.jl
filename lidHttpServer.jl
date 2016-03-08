@@ -20,6 +20,7 @@
 using Text
 using Base.Test, Stage, Ollam, DataStructures
 using HttpServer
+using JSON
 
 filename = "./data/text-train.tsv"
 if size(ARGS, 1) > 0
@@ -34,6 +35,8 @@ end
 
 train       = map(l -> split(chomp(l), '\t')[2], filelines(filename))
 train_truth = map(l -> split(chomp(l), '\t')[1], filelines(filename))
+
+languages   = unique(train_truth)
 
 bkgmodel, fextractor, model = tc_train(train, train_truth, lid_iterating_tokenizer, mincount = 2, cutoff = 1e10,
                                        trainer = (fvs, truth, init_model) -> train_mira(fvs, truth, init_model, iterations = 20, k = 2, C = 0.01, average = true),
@@ -55,14 +58,17 @@ end
 # HTTP Server to identify language from PUT Request data
 
 http = HttpHandler() do req::Request, res::Response
-    if req.method != "PUT"
-        return Response("{\"lang\": \"error - use PUT method\"}")
+    if req.method == "PUT"
+        text = bytestring(req.data)
+        lang = detectLang(text)
+        # println(lang)
+        # println(text)
+        return Response(string("{\"lang\": \"", lang, "\"}"))
+    elseif req.method == "GET"
+        return Response(JSON.json(languages))
+    else
+        return Response("{\"lang\": \"error\"}")
     end
-    text = bytestring(req.data)
-    lang = detectLang(text)
-    # println(lang)
-    # println(text)
-    return Response(string("{\"lang\": \"", lang, "\"}"))
 end
 http.events["error"]  = (client, err) -> println(err)
 http.events["listen"] = (saddr) -> println("Running on http://$saddr (Press CTRL+C to quit)")
