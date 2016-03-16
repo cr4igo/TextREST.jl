@@ -81,7 +81,7 @@ for lang in "${languages[@]}"; do
       rm -rf extracted
     fi
     echo "preprocessing data..."
-    perl -pe 's/\n/ / if !($_ =~ m/<\/doc>/)' $text_file | sed 's/<doc id=\"//' | sed 's/\" url=\"/\t/' | sed 's/\" title=\"/\t/' | sed 's/\">\s*/\t/' | sed 's/\s*<\/doc>//' | sed 's/^/'$lang'\t/' | awk -F'\t' '{ if(NF==5) print; }' > $format_file
+    perl -pe 's/\n/ / if !($_ =~ m/<\/doc>/)' $text_file | sed 's/<doc id=\"//' | sed 's/\" url=\"/\t/' | sed 's/\" title=\"/\t/' | sed 's/\">\s*/\t/' | sed 's/\s*<\/doc>//' | sed 's/^/'$lang'\t/' | awk -F'\t' '{ if(NF==5 && length($5)>500) print; }' > $format_file
   fi
   echo "generating data..."
   lc=$(wc -l < $format_file)
