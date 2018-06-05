@@ -19,7 +19,7 @@
 
 module TextREST
 
-using Text
+using Text.Text
 using Stage, Ollam, DataStructures
 using HttpServer, JSON
 using JLD, HDF5
