@@ -19,7 +19,7 @@
 
 module TextREST
 
-using Text
+using Text: Text
 using Stage
 using Ollam
 using DataStructures
