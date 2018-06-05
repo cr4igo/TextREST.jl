@@ -17,7 +17,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-using Text: Text
+using Text: Text, BKG
 
 export lid_train, lid_save, lid_load, lid
 
