@@ -17,6 +17,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
+using Text: Text
+
 export lid_train, lid_save, lid_load, lid
 
 # function to train the model using training data file
