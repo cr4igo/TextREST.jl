@@ -19,10 +19,14 @@
 
 module TextREST
 
-using Text.Text
-using Stage, Ollam, DataStructures
-using HttpServer, JSON
-using JLD, HDF5
+using Text
+using Stage
+using Ollam
+using DataStructures
+using HttpServer
+using JSON
+using JLD
+using HDF5
 
 export text_rest_server
 
